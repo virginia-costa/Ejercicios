@@ -310,6 +310,43 @@ const resultado = obtenerEstadisticasGenero(personas);
 console.log(resultado);
 
 
+useEffect(() => {
+  const email = localStorage.getItem("email");
+  console.log("el email es:", email);
+  const usuarioId = async (email) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    try {
+      console.log("el email es:", email);
+      const response = await fetch(
+        `http://localhost:8000/api/usuarios/${email}`,
+        requestOptions
+      );
+      if (response.ok) {
+        const respuesta = await response.json();
+        console.log(respuesta);
+        const idUsuario = respuesta.idusuaro;
+        setIdUsuario(idUsuario);
+        localStorage.setItem("usuario_id", idUsuario);
+        console.log(idUsuario);
+      } else {
+        const respuesta = await response.json();
+        console.log(respuesta.error);
+      }
+    } catch (error) {
+      alert("An unexpected error has occurred. Please try again.");
+    }
+  };
+  usuarioId();
+}, []);
+
+
 
 
 
